@@ -101,7 +101,6 @@ def part2(sample_input: bool = False) -> str:
             if antinode in nodes:
                 nodes[antinode] = True
     
-    print(f"{[k for k, v in nodes.items() if v]}")
     return sum([x for x in nodes.values() if x is True])
  
 

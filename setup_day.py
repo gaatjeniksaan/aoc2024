@@ -8,12 +8,12 @@ from aocd.models import Puzzle
 YEAR: Final[int] = 2024
 
 
-def main(day: int, example: str) -> None:
+def main(day: int, year: int, example: str) -> None:
     print(f"setting up for {day=}")
 
     root_dir = pathlib.Path().absolute()
 
-    day_dir = root_dir / f"day{day}"
+    day_dir = root_dir / str(year) / f"day{day}"
 
     test_dir = day_dir / "tests" 
     # Set exist_ok = False, so we fail if we try to overwrite our
@@ -42,7 +42,7 @@ def main(day: int, example: str) -> None:
     (test_dir / "__init__.py").touch()
 
     # Populate puzzle input
-    puzzle = Puzzle(year=YEAR, day=day)
+    puzzle = Puzzle(year=year, day=day)
     
     input_txt_file = day_dir / "input.txt"
     input_txt_file.write_text(puzzle.input_data)
@@ -51,6 +51,7 @@ def main(day: int, example: str) -> None:
 if __name__ == "__main__":
     argparser = argparse.ArgumentParser("aoc")
     argparser.add_argument("-d", "--day", type=int, help="Day number you want to init for.")
+    argparser.add_argument("-y", "--year", default=YEAR, type=int, help=f"Year you wanna init for. Defaults to {YEAR=}")
     argparser.add_argument(
         "-e",
         "--example",
@@ -60,4 +61,4 @@ if __name__ == "__main__":
     )
     args = argparser.parse_args()
 
-    main(args.day, args.example)
+    main(args.day, args.year, args.example)
