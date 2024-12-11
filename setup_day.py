@@ -15,31 +15,19 @@ def main(day: int, year: int, example: str) -> None:
 
     day_dir = root_dir / str(year) / f"day{day}"
 
-    test_dir = day_dir / "tests" 
     # Set exist_ok = False, so we fail if we try to overwrite our
-    test_dir.mkdir(parents=True, exist_ok=False)
+    day_dir.mkdir(parents=True, exist_ok=False)
 
-    test_example_data = test_dir / "example.txt"
-    test_example_data.touch()
+    (day_dir / "example.txt").touch()
 
     # Copy solution template -> main.py
     with open(str(root_dir / "template_for_solution.py")) as source:
         content = source.read()
         modified_content = content.replace('1  # This will be regex/replaced', str(day))
+        modified_content = content.replace('"NO ANSWER PROVIDED"  # This will be replaced', f'"{example}"')
 
         with open(str(day_dir / "main.py"), "w") as target:
             target.write(modified_content)
-
-    # Copy test template -> tests/test_dayx.py
-    with open(str(root_dir / "template_for_test.py")) as source:
-        content = source.read()
-        modified_content = content.replace('""  # This will be replaced with input from user', f'"{example}"')
-
-        with open(str(test_dir / f"test_day{day}.py"), "w") as target:
-            target.write(modified_content)
-        
-    # Populate /tests with __init__.py
-    (test_dir / "__init__.py").touch()
 
     # Populate puzzle input
     puzzle = Puzzle(year=year, day=day)
