@@ -89,7 +89,7 @@ def part2(sample_input: bool = False) -> str:
             
             start += 1
         pointer -= 1
-    print(f"final {array=}")
+    # print(f"final {array=}")
 
     total = 0
     for i, value in enumerate(array):
