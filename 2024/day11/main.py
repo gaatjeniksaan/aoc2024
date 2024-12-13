@@ -1,4 +1,4 @@
-from functools import lru_cache
+from functools import cache
 from pathlib import Path
 from typing import Counter, Final
 import time  # Import the time module
@@ -28,7 +28,7 @@ def main():
     # aocd.submit(solution2, part="b", day=DAY, year=YEAR)
 
 
-@lru_cache(maxsize=None)
+@cache
 def blink(stone: int) -> list[int]:
     if stone == 0:
         return [1]  # The stone "becomes" 1
