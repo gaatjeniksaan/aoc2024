@@ -24,7 +24,7 @@ def main(day: int, year: int, example: str) -> None:
     with open(str(root_dir / "template_for_solution.py")) as source:
         content = source.read()
         modified_content = content.replace('1  # This will be regex/replaced', str(day))
-        modified_content = content.replace('"NO ANSWER PROVIDED"  # This will be replaced', f'"{example}"')
+        modified_content = modified_content.replace('"NO ANSWER PROVIDED"  # This will be replaced', f'"{example}"')
 
         with open(str(day_dir / "main.py"), "w") as target:
             target.write(modified_content)
