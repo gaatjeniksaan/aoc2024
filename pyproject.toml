@@ -7,6 +7,7 @@ requires-python = ">=3.12"
 dependencies = [
     "advent-of-code-data>=2.0.4",
     "jupyter>=1.1.1",
+    "numpy>=2.2.0",
 ]
 
 [tool.uv]
