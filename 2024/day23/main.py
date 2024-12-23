@@ -1,13 +1,15 @@
+from collections import defaultdict
 from pathlib import Path
 import time
 from typing import Final
 
 import aocd
+import networkx
 
 
-EXAMPLE_ANSWER_1: Final[str] = "NO ANSWER PROVIDED"  # This will be replaced
-EXAMPLE_ANSWER_2: Final[str] = "NO ANSWER PROVIDED"  # Provide this yourself
-DAY: Final[int] = 1  # This will be regex/replaced
+EXAMPLE_ANSWER_1: Final[str] = "7"
+EXAMPLE_ANSWER_2: Final[str] = "co,de,ka,ta"
+DAY: Final[int] = 23
 YEAR: Final[int] = 2024
 
 
@@ -36,20 +38,54 @@ def main():
 
 
 def part1(sample_input: bool = False) -> str:
-    data = load_data(sample_input)
+    data = load_data(sample_input).split("\n")
 
-    # Your implementation goes here
-    answer = "geenidee"
-    return answer
+    conns = defaultdict(list)
+    sets = set()
+
+    for conn in data:
+        l, r = conn.split("-")
+        conns[l].append(r)
+        conns[r].append(l)
+    
+    for conn in data:
+        l, r = conn.split("-")
+        l_conns = conns[l]
+        r_conns = conns[r]
+        for lc in l_conns:
+            if lc in r_conns:
+                combo = sorted([l, r, lc])
+                sets.add(tuple(combo))
+        # for rc in r_conns:
+        #     if rc in l_conns:
+        #         combo = sorted([l, r, rc])
+        #         sets.add(tuple(combo))
+    total = 0
+    for s in sets:
+        if any(x.startswith("t") for x in s):
+            total += 1
+
+    return str(total)
 
 
 def part2(sample_input: bool = False) -> str:
-    data = load_data(sample_input)
-    
-    # Your implementation goes here
-    answer = "geenidee"
+    data = load_data(sample_input).split("\n")
+
+    g = networkx.Graph()
+    for conn in data:
+        t = tuple(conn.split("-"))
+        g.add_edges_from([t])
+
+    longest = []
+    for x in networkx.find_cliques(g):
+        if len(x) > len(longest):
+            longest = x
+    print(",".join(sorted(longest)))
+
+    answer = ",".join(sorted(longest))
     return answer
  
+
 
 def load_data(sample_input: bool) -> str:
     p = Path(__file__).parent.absolute()

@@ -1,5 +1,7 @@
 from atexit import register
+from collections import defaultdict
 import itertools
+from mimetypes import init
 import multiprocessing
 from pathlib import Path
 import time
@@ -26,16 +28,16 @@ def main():
     print(f"Execution time for part1: {elapsed_time_ms:.2f} ms")
     aocd.submit(solution1, part="a", day=DAY, year=YEAR)
 
-    answer2 = part2(sample_input=True) == EXAMPLE_ANSWER_2
-    assert answer2 == EXAMPLE_ANSWER_2, f"calculated answer '{answer2}' != expected answer '{EXAMPLE_ANSWER_2}'"
+    # answer2 = part2(sample_input=True) == EXAMPLE_ANSWER_2
+    # assert answer2 == EXAMPLE_ANSWER_2, f"calculated answer '{answer2}' != expected answer '{EXAMPLE_ANSWER_2}'"
     start_time = time.time()
     solution2 = part2()
     end_time = time.time()
 
-    elapsed_time_ms = (end_time - start_time) * 1000  # Convert to milliseconds
-    print(f"solution for part2: {solution2}")
-    print(f"Execution time for part2: {elapsed_time_ms:.2f} ms")
-    aocd.submit(solution2, part="b", day=DAY, year=YEAR)
+    # elapsed_time_ms = (end_time - start_time) * 1000  # Convert to milliseconds
+    # print(f"solution for part2: {solution2}")
+    # print(f"Execution time for part2: {elapsed_time_ms:.2f} ms")
+    # aocd.submit(solution2, part="b", day=DAY, year=YEAR)
 
 
 def get_combo_operand_value(operand: int, registers: dict[str, int]) -> int:
@@ -225,19 +227,22 @@ def part2(sample_input: bool = False) -> str:
                     program.append(int(char))
         else:
             continue
-    start = 0
-    step = 100000
-    for initial_A in itertools.count(start=start, step=step):
-        output = run_program(initial_A, program, program_str)
-        # if len(output) > 16:
-        #     raise ValueError(f"too large! {len(output)}")
-        if output[-6:] == [1,7,5,5,3,0]:
-            # raise ValueError
-            print(f"{initial_A=}:{len(output)}\t\t\t{output=}")
-        
 
-    #     # if initial_A % 1000:
-    #     #     print(f"{initial_A=}")
+    n = 16
+    lengths = defaultdict(list)
+    start =  190384113204000
+
+    for initial_A in itertools.count(start=start, step=1):
+        output = run_program(initial_A, program, program_str)
+        print(f"{initial_A=}")
+        print(f"{output=}")
+        print()
+        if output == program:
+            raise ValueError(f"HALLELULAJ {initial_A}:{output=}:{program=}")
+        if output[-n:] == program[-n:]:
+            raise ValueError(f"initial_A found!! {initial_A}")
+
+    raise ValueError(f"oops")
 
 
 
@@ -245,6 +250,7 @@ def part2(sample_input: bool = False) -> str:
     
     
     # Your implementation goes here
+    raise ValueError("oops")
     answer = "geenidee"
     return answer
  
